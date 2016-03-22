@@ -10,15 +10,20 @@ public class PeakFinder {
     }
 
     private static int findPeakIndex(int[] array, int min, int max) {
+        // general base case
         if (min == max) {
             return min;
         }
+        // split the problem in half
         int mid = (max + min) / 2;
         if (mid < max && array[mid] < array[mid + 1]) {
+            // peak is in right half
             return findPeakIndex(array, mid + 1, max);
         } else if (min < mid && array[mid] < array[mid - 1]) {
+            // peak is in left half
             return findPeakIndex(array, min, mid - 1);
         } else {
+            // we hit the peak
             return mid;
         }
     }
