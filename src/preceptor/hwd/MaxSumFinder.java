@@ -1,7 +1,5 @@
 package preceptor.hwd;
 
-import java.util.Arrays;
-
 /**
  * @author Ari Weiland
  */
@@ -27,13 +25,34 @@ public class MaxSumFinder {
             } else if (right[0] == 0) {
                 return left;
             } else {
-                int spanSum = left[0] + right[0];
+                int leftSum = left[0];
+                // try crossing over from the left
                 for (int i=left[2]; i < right[1]; i++) {
-                    spanSum += array[i];
+                    leftSum += array[i];
+                    if (leftSum >= left[0]) {
+                        left[0] = leftSum;
+                        left[2] = i + 1;
+                    }
                 }
-                if (spanSum > left[0] && spanSum > right[0]) {
-                    return new int[]{spanSum, left[1], right[2]};
-                } else if (left[0] > right[0]) {
+                // try the combination of left and right
+                leftSum += right[0];
+                if (leftSum >= left[0]) {
+                    left[0] = leftSum;
+                    left[2] = right[2];
+                    // if the combination works, we are done
+                    return left;
+                }
+                // try crossing over from the right
+                int rightSum = right[0];
+                for (int i=right[1] - 1; i >= left[2]; i--) {
+                    rightSum += array[i];
+                    if (rightSum >= right[0]) {
+                        right[0] = rightSum;
+                        right[1] = i;
+                    }
+                }
+                // return whichever is greater
+                if (left[0] > right[0]) {
                     return left;
                 } else {
                     return right;
@@ -47,14 +66,15 @@ public class MaxSumFinder {
         System.out.println(maxSum(new int[0]));
         System.out.println(maxSum(new int[]{-4}));
         System.out.println(maxSum(new int[]{3}));
-        for (int j=0; j<10; j++) {
-            int[] random = new int[13];
-            for (int i=0; i<random.length; i++) {
-                random[i] = (int) (Math.random() * 21) - 8;
-            }
-            System.out.println(Arrays.toString(random));
-            System.out.println(maxSum(random));
-        }
+        System.out.println(maxSum(new int[]{1,2,-1,0,5,-7,4,2}));
+//        for (int j=0; j<10; j++) {
+//            int[] random = new int[13];
+//            for (int i=0; i<random.length; i++) {
+//                random[i] = (int) (Math.random() * 21) - 8;
+//            }
+//            System.out.println(Arrays.toString(random));
+//            System.out.println(maxSum(random));
+//        }
     }
 }
 
